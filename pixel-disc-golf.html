@@ -172,6 +172,9 @@
   function pointSegDist(px,py,x1,y1,x2,y2){var dx=x2-x1,dy=y2-y1,l=dx*dx+dy*dy;if(!l)return Math.hypot(px-x1,py-y1);var t=Math.max(0,Math.min(1,((px-x1)*dx+(py-y1)*dy)/l));return Math.hypot(px-(x1+t*dx),py-(y1+t*dy))}
   function pointFeatureDist(px,py,f){var best=Infinity;for(var i=1;i<f.points.length;i++)best=Math.min(best,pointSegDist(px,py,f.points[i-1].x,f.points[i-1].y,f.points[i].x,f.points[i].y));return best}
   function featurePoints(x1,y1,x2,y2,r,amount){var base=[],out=[],dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),nx=-dy/len,ny=dx/len,count=5+Math.floor(r()*3),phase=r()*Math.PI*2,freq=2+Math.floor(r()*2);for(var i=0;i<count;i++){var t=i/(count-1),sway=Math.sin(t*Math.PI*freq+phase)*amount*(.45+r()*.55)+(i>0&&i<count-1?(r()-.5)*amount*.8:0);base.push({x:x1+dx*t+nx*sway,y:y1+dy*t+ny*sway})}out.push(base[0]);var start=base[0];for(var j=1;j<base.length-1;j++){var control=base[j],end={x:(base[j].x+base[j+1].x)/2,y:(base[j].y+base[j+1].y)/2};for(var k=1;k<=7;k++){var u=k/7,om=1-u;out.push({x:om*om*start.x+2*om*u*control.x+u*u*end.x,y:om*om*start.y+2*om*u*control.y+u*u*end.y})}start=end}for(var z=1;z<=7;z++){var v=z/7;out.push({x:start.x+(base[base.length-1].x-start.x)*v,y:start.y+(base[base.length-1].y-start.y)*v})}return out}
+  function basketTouchesFeature(b,f){return f&&pointFeatureDist(b.x,b.y+13,f)<f.width/2+26}
+  function basketSpotClear(b,river,path,trees){if(basketTouchesFeature(b,river)||basketTouchesFeature(b,path))return false;for(var i=0;i<trees.length;i++){var t=trees[i];if(Math.hypot(b.x-t.x,b.y+13-t.y)<t.s+30)return false}return true}
+  function placeBasket(initial,river,path,trees){if(basketSpotClear(initial,river,path,trees))return initial;for(var radius=12;radius<=180;radius+=12){for(var i=0;i<32;i++){var a=i*Math.PI/16,candidate={x:Math.max(36,Math.min(W-36,initial.x+Math.cos(a)*radius)),y:Math.max(42,Math.min(190,initial.y+Math.sin(a)*radius))};if(basketSpotClear(candidate,river,path,trees))return candidate}}for(var y=42;y<=190;y+=8)for(var x=36;x<=W-36;x+=8){var fallback={x:x,y:y};if(basketSpotClear(fallback,river,path,trees))return fallback}return initial}
   function makeCourse(s){var r=rngFrom(s), namesA=['Pine','Cedar','Otter','Moss','Raven','Fern','Chain','Salmon','Fox','Eagle'],namesB=['Bend','Run','Gap','Hollow','Crossing','Ridge','Landing','Turn','Lane','Reach'];var arr=[];
     for(var h=0;h<roundLength;h++){
       var par=r()<.63?3:(r()<.8?4:5), basket={x:72+r()*240,y:55+r()*80}, tee={x:80+r()*224,y:535+r()*45};
@@ -179,6 +182,10 @@
       var river=null,path=null;
       if(r()<.82){var ry=205+r()*185,rx1=-45,ry1=ry+(r()-.5)*35,rx2=429,ry2=ry+(r()-.5)*170;river={points:featurePoints(rx1,ry1,rx2,ry2,r,34+r()*38),width:19+r()*15}}
       if(r()<.88){var side=r()<.5,px1=side?-35:419,py1=490+r()*80,px2=side?419:-35,py2=105+r()*145;path={points:featurePoints(px1,py1,px2,py2,r,40+r()*52),width:12+r()*8}}
+      basket=placeBasket(basket,river,path,trees);
+      trees=trees.filter(function(t){return Math.hypot(basket.x-t.x,basket.y+13-t.y)>=t.s+30});
+      if(basketTouchesFeature(basket,river))river=null;
+      if(basketTouchesFeature(basket,path))path=null;
       var pedestrian=null;
       var pixelDist=Math.hypot(tee.x-basket.x,tee.y-basket.y),feet=Math.round((pixelDist*.68)/5)*5;
       arr.push({par:par,feet:feet,basket:basket,tee:tee,trees:trees,river:river,path:path,pedestrian:pedestrian,mando:null,name:namesA[Math.floor(r()*namesA.length)]+' '+namesB[Math.floor(r()*namesB.length)],wind:(r()-.5)*2.2,windAngle:r()*Math.PI*2,phase:r()*20});
