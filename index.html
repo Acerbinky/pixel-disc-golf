@@ -177,7 +177,7 @@
   function placeBasket(initial,river,path,trees){if(basketSpotClear(initial,river,path,trees))return initial;for(var radius=12;radius<=180;radius+=12){for(var i=0;i<32;i++){var a=i*Math.PI/16,candidate={x:Math.max(36,Math.min(W-36,initial.x+Math.cos(a)*radius)),y:Math.max(42,Math.min(190,initial.y+Math.sin(a)*radius))};if(basketSpotClear(candidate,river,path,trees))return candidate}}for(var y=42;y<=190;y+=8)for(var x=36;x<=W-36;x+=8){var fallback={x:x,y:y};if(basketSpotClear(fallback,river,path,trees))return fallback}return initial}
   function makeCourse(s){var r=rngFrom(s), namesA=['Pine','Cedar','Otter','Moss','Raven','Fern','Chain','Salmon','Fox','Eagle'],namesB=['Bend','Run','Gap','Hollow','Crossing','Ridge','Landing','Turn','Lane','Reach'];var arr=[];
     for(var h=0;h<roundLength;h++){
-      var par=r()<.63?3:(r()<.8?4:5), basket={x:72+r()*240,y:55+r()*80}, tee={x:80+r()*224,y:535+r()*45};
+      var par=r()<.63?3:(r()<.8?4:5), basket={x:72+r()*240,y:55+r()*80}, tee={x:120+r()*144,y:492+r()*28};
       var trees=[],count=9+Math.floor(r()*10);for(var i=0;i<count;i++){var tx=25+r()*334,ty=95+r()*420;if(pointSegDist(tx,ty,tee.x,tee.y,basket.x,basket.y)>35&&Math.hypot(tx-tee.x,ty-tee.y)>45&&Math.hypot(tx-basket.x,ty-basket.y)>42)trees.push({x:tx,y:ty,s:10+Math.floor(r()*8)})}
       var river=null,path=null;
       if(r()<.82){var ry=205+r()*185,rx1=-45,ry1=ry+(r()-.5)*35,rx2=429,ry2=ry+(r()-.5)*170;river={points:featurePoints(rx1,ry1,rx2,ry2,r,34+r()*38),width:19+r()*15}}
@@ -210,7 +210,7 @@
   function drawCourse(){var h=holes[holeIndex];for(var y=0;y<H;y+=16)for(var x=0;x<W;x+=16)rect(x,y,16,16,((x/16+y/16)%3===0)?palette.grass2:palette.grass);for(var i=0;i<75;i++){var q=rngFrom(seed+holeIndex+'ground'+i),gx=q()*W,gy=q()*H;if(currentBiome==='snow'){rect(gx,gy,2,2,i%3?'#eaf4f3':palette.dark)}else if(currentBiome==='desert'){rect(gx,gy,3+(i%3),2,i%2?palette.dark:'#edc77f')}else rect(gx,gy,2,4,palette.dark)}
     if(h.path){strokeFeature(h.path,h.path.width+4,palette.path2);strokeFeature(h.path,h.path.width,palette.path);for(var p=0;p<16;p++){var pp=pointOnFeature(h.path,p/15);rect(pp.x-2,pp.y-1,5,3,palette.path2)}}
     if(h.river){strokeFeature(h.river,h.river.width+5,palette.riverEdge);strokeFeature(h.river,h.river.width,palette.river);for(var w=1;w<15;w++){var rp=pointOnFeature(h.river,w/15);line(rp.x-7,rp.y,rp.x+8,rp.y,2,palette.river2)}}
-    rect(h.tee.x-17,h.tee.y-9,34,23,currentBiome==='snow'?'#6f8085':'#59625d');rect(h.tee.x-14,h.tee.y-7,28,17,palette.tee);rect(h.tee.x-10,h.tee.y-4,20,2,currentBiome==='desert'?'#d7c09b':'#afb3a8');
+    rect(h.tee.x-11,h.tee.y-17,23,34,currentBiome==='snow'?'#6f8085':'#59625d');rect(h.tee.x-8,h.tee.y-14,17,28,palette.tee);rect(h.tee.x-1,h.tee.y-10,2,20,currentBiome==='desert'?'#d7c09b':'#afb3a8');
     var sorted=h.trees.slice().sort(function(a,b){return a.y-b.y});sorted.forEach(drawTree);drawBasket(h.basket);if(h.mando)drawMando(h.mando);if(h.pedestrian)drawPedestrian(h.pedestrian);
   }
   function drawDisc(){var colors={driver:'#f05a48',mid:'#f3cc43',putter:'#69bee8'},c=colors[discType];for(var i=0;i<trail.length;i++){ctx.globalAlpha=(i+1)/trail.length*.18;rect(trail[i].x-2,trail[i].y-1,5,3,c)}ctx.globalAlpha=1;rect(disc.x-6,disc.y-2,12,5,'#26342c');rect(disc.x-5,disc.y-3,10,4,c);rect(disc.x-2,disc.y-4,4,2,'#fff4c5')}
