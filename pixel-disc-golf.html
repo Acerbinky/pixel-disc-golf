@@ -23,7 +23,7 @@
     body{font-family:"DM Mono",monospace;padding:clamp(10px,2vw,24px);background-image:linear-gradient(90deg,rgba(35,64,38,.045) 1px,transparent 1px),linear-gradient(rgba(35,64,38,.045) 1px,transparent 1px);background-size:8px 8px}
     button,input{font:inherit}
     button{color:inherit}
-    .top-options{width:min(932px,100%);margin:0 auto 12px;display:grid;grid-template-columns:minmax(0,2fr) minmax(245px,.85fr);gap:10px}
+    .top-options{width:min(520px,100%);margin:0 auto 12px;display:grid;grid-template-columns:1fr;gap:8px}
     .biome-bar,.round-bar{display:grid;align-items:stretch;background:var(--panel);border:3px solid var(--line);box-shadow:5px 5px 0 var(--shadow)}
     .biome-bar{grid-template-columns:auto repeat(3,minmax(0,1fr))}.round-bar{grid-template-columns:auto repeat(2,minmax(0,1fr))}
     .biome-label{display:flex;align-items:center;padding:0 13px;font-family:"Press Start 2P",monospace;font-size:9px;color:var(--muted);border-right:2px solid var(--line)}
@@ -61,7 +61,7 @@
     .how strong{color:var(--ink)}
     .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
     .game-shell{padding:8px;position:relative;overflow:hidden}
-    .canvas-wrap{position:relative;width:100%;aspect-ratio:3/5;background:#76a95a;border:2px solid var(--line);overflow:hidden;touch-action:none;cursor:crosshair}
+    .canvas-wrap{position:relative;width:100%;aspect-ratio:48/85;background:#76a95a;border:2px solid var(--line);overflow:hidden;touch-action:none;cursor:crosshair}
     canvas{display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges}
     .top-hud{position:absolute;top:8px;left:8px;right:8px;display:flex;justify-content:space-between;pointer-events:none;gap:8px}
     .hud-chip{background:rgba(18,31,19,.86);color:#fff5d6;border:2px solid #f3df9b;padding:6px 8px;font-family:"Press Start 2P",monospace;font-size:8px;line-height:1.4;box-shadow:2px 2px #172317}
@@ -82,8 +82,8 @@
     .score-cell{min-height:45px;padding:7px 4px;text-align:center;border-right:2px solid var(--line);border-bottom:2px solid var(--line);font-size:11px}.score-cell b{font-size:14px;display:block}.score-cell.total{background:var(--key);color:#1b2418}
     .legend{display:flex;flex-wrap:wrap;gap:7px 12px;font-size:10px;color:var(--muted);padding:3px 2px}.swatch{width:11px;height:11px;display:inline-block;border:1px solid var(--line);vertical-align:-2px;margin-right:4px}
     .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-    @media(max-width:760px){body{padding:8px 8px 18px}.top-options{margin-bottom:8px;grid-template-columns:1fr;gap:8px}.biome-bar{grid-template-columns:repeat(3,1fr)}.round-bar{grid-template-columns:repeat(2,1fr)}.biome-label{grid-column:1/-1;justify-content:center;min-height:27px;border-right:0;border-bottom:2px solid var(--line)}.biome-tab,.round-tab{font-size:11px}.app{display:flex;flex-direction:column}.side{position:static;width:100%}.game-shell{order:-1;width:100%;max-width:470px;margin:auto}.canvas-wrap{max-height:67vh}.mobile-throw-hint{display:block}.card{padding:12px}.seedbar{grid-template-columns:1fr auto}.how{display:block;margin-top:10px}.actions{grid-template-columns:1fr 1fr}.score-grid{grid-template-columns:repeat(3,1fr)}.pixel-title{font-size:14px}.hole-head{align-items:center}.stats{margin-top:9px}.side{gap:8px}}
-    @media(max-width:380px){.canvas-wrap{max-height:61vh}.disc-btn{font-size:10px}.btn{padding:7px 8px;font-size:11px}}
+    @media(max-width:760px){body{padding:8px 8px 18px}.top-options{margin-bottom:8px}.biome-bar{grid-template-columns:repeat(3,1fr)}.round-bar{grid-template-columns:repeat(2,1fr)}.biome-label{grid-column:1/-1;justify-content:center;min-height:27px;border-right:0;border-bottom:2px solid var(--line)}.biome-tab,.round-tab{font-size:11px}.app{display:flex;flex-direction:column}.side{position:static;width:100%}.game-shell{order:-1;width:100%;max-width:470px;margin:auto}.mobile-throw-hint{display:block}.card{padding:12px}.seedbar{grid-template-columns:1fr auto}.how{display:block;margin-top:10px}.actions{grid-template-columns:1fr 1fr}.score-grid{grid-template-columns:repeat(3,1fr)}.pixel-title{font-size:14px}.hole-head{align-items:center}.stats{margin-top:9px}.side{gap:8px}}
+    @media(max-width:380px){.disc-btn{font-size:10px}.btn{padding:7px 8px;font-size:11px}}
     @media(prefers-reduced-motion:reduce){*{transition:none!important}}
   </style>
 </head>
@@ -134,7 +134,7 @@
 
     <section class="game-shell" aria-label="Disc golf course">
       <div class="canvas-wrap" id="canvasWrap">
-        <canvas id="game" width="384" height="640" tabindex="0" role="application" aria-label="Top-down pixel art disc golf hole. Drag back from your disc and release to throw. Keyboard players can press Enter to throw toward the basket."></canvas>
+        <canvas id="game" width="384" height="680" tabindex="0" role="application" aria-label="Top-down pixel art disc golf hole. Drag back from your disc and release to throw. Keyboard players can press Enter to throw toward the basket."></canvas>
         <div class="top-hud"><span class="hud-chip" id="lieChip">TEE · 286 FT</span><span class="hud-chip"><span class="wind-arrow" id="windArrow">↑</span> <span id="windText">3 MPH</span></span></div>
         <div class="toast" id="toast" role="status"></div>
         <div class="overlay" id="resultOverlay">
@@ -155,8 +155,8 @@
   var canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
   var wrap=document.getElementById('canvasWrap');
   ctx.imageSmoothingEnabled=false;
-  var W=384,H=640, seed='', holes=[], holeIndex=0, roundLength=9, scores=new Array(roundLength).fill(null), strokes=0;
-  var discType='driver', disc={x:192,y:560,vx:0,vy:0,moving:false}, lastLie={x:192,y:560};
+  var W=384,H=680, seed='', holes=[], holeIndex=0, roundLength=9, scores=new Array(roundLength).fill(null), strokes=0;
+  var discType='driver', disc={x:192,y:600,vx:0,vy:0,moving:false}, lastLie={x:192,y:600};
   var dragging=false, dragX=0,dragY=0, anim=0, finished=false, toastTimer=0, trail=[], mandoState='none', currentBiome='forest', flightFrames=0, restarting=false;
   var reducedMotion=matchMedia('(prefers-reduced-motion:reduce)').matches,isDark=matchMedia('(prefers-color-scheme:dark)').matches;
   var palettes={
@@ -177,11 +177,11 @@
   function placeBasket(initial,river,path,trees){if(basketSpotClear(initial,river,path,trees))return initial;for(var radius=12;radius<=180;radius+=12){for(var i=0;i<32;i++){var a=i*Math.PI/16,candidate={x:Math.max(36,Math.min(W-36,initial.x+Math.cos(a)*radius)),y:Math.max(42,Math.min(190,initial.y+Math.sin(a)*radius))};if(basketSpotClear(candidate,river,path,trees))return candidate}}for(var y=42;y<=190;y+=8)for(var x=36;x<=W-36;x+=8){var fallback={x:x,y:y};if(basketSpotClear(fallback,river,path,trees))return fallback}return initial}
   function makeCourse(s){var r=rngFrom(s), namesA=['Pine','Cedar','Otter','Moss','Raven','Fern','Chain','Salmon','Fox','Eagle'],namesB=['Bend','Run','Gap','Hollow','Crossing','Ridge','Landing','Turn','Lane','Reach'];var arr=[];
     for(var h=0;h<roundLength;h++){
-      var par=r()<.63?3:(r()<.8?4:5), basket={x:72+r()*240,y:55+r()*80}, tee={x:120+r()*144,y:492+r()*28};
-      var trees=[],count=9+Math.floor(r()*10);for(var i=0;i<count;i++){var tx=25+r()*334,ty=95+r()*420;if(pointSegDist(tx,ty,tee.x,tee.y,basket.x,basket.y)>35&&Math.hypot(tx-tee.x,ty-tee.y)>45&&Math.hypot(tx-basket.x,ty-basket.y)>42)trees.push({x:tx,y:ty,s:10+Math.floor(r()*8)})}
+      var par=r()<.63?3:(r()<.8?4:5), basket={x:72+r()*240,y:55+r()*80}, tee={x:120+r()*144,y:H-148+r()*28};
+      var trees=[],count=9+Math.floor(r()*10);for(var i=0;i<count;i++){var tx=25+r()*334,ty=95+r()*(H-220);if(pointSegDist(tx,ty,tee.x,tee.y,basket.x,basket.y)>35&&Math.hypot(tx-tee.x,ty-tee.y)>45&&Math.hypot(tx-basket.x,ty-basket.y)>42)trees.push({x:tx,y:ty,s:10+Math.floor(r()*8)})}
       var river=null,path=null;
-      if(r()<.82){var ry=205+r()*185,rx1=-45,ry1=ry+(r()-.5)*35,rx2=429,ry2=ry+(r()-.5)*170;river={points:featurePoints(rx1,ry1,rx2,ry2,r,34+r()*38),width:19+r()*15}}
-      if(r()<.88){var side=r()<.5,px1=side?-35:419,py1=490+r()*80,px2=side?419:-35,py2=105+r()*145;path={points:featurePoints(px1,py1,px2,py2,r,40+r()*52),width:12+r()*8}}
+      if(r()<.82){var ry=205+r()*(H-455),rx1=-45,ry1=ry+(r()-.5)*35,rx2=429,ry2=ry+(r()-.5)*170;river={points:featurePoints(rx1,ry1,rx2,ry2,r,34+r()*38),width:19+r()*15}}
+      if(r()<.88){var side=r()<.5,px1=side?-35:419,py1=H-150+r()*80,px2=side?419:-35,py2=105+r()*145;path={points:featurePoints(px1,py1,px2,py2,r,40+r()*52),width:12+r()*8}}
       basket=placeBasket(basket,river,path,trees);
       trees=trees.filter(function(t){return Math.hypot(basket.x-t.x,basket.y+13-t.y)>=t.s+30});
       if(basketTouchesFeature(basket,river))river=null;
